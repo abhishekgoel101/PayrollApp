@@ -1,97 +1,305 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# PayrollApp - React Native Payslip Management
 
-# Getting Started
+A React Native application (TypeScript) for managing and viewing payslips with native file handling, clean architecture, accessibility support, and polished mobile UX.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 📱 Features
 
-## Step 1: Start Metro
+### Payslip List Screen
+- Scrollable list displaying payslips with date range ("fromDate – toDate")
+- **Sorting**: Toggle between newest first / oldest first
+- **Year Filter**: Filter payslips by year
+- **Text Search**: Search by payslip ID, date, or filename (with debounce)
+- Pull-to-refresh support
+- Empty state handling
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### Payslip Details Screen
+- Displays payslip ID, date range (fromDate, toDate), and file type indicator (PDF/Image)
+- **Download Action**: Saves payslip to device storage with success/failure alerts
+- **Preview Action**: Opens file using native viewer (PDF reader, image viewer)
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Native File Handling
+- Saves files to platform-appropriate directories:
+  - **Android**: Public Downloads directory
+  - **iOS**: App Documents directory
+- Android runtime permissions handling (for API < 33)
+- Native file viewer integration via `react-native-file-viewer`
+- Media scanner trigger on Android so files appear in Files app
 
-```sh
-# Using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
+## 🛠 Tech Stack
+
+| Category | Technology | Version |
+|----------|------------|---------|
+| **Framework** | React Native (CLI) | 0.83.0 |
+| **Language** | TypeScript | 5.8.3 |
+| **Runtime** | Node.js | >= 20 |
+| **Navigation** | React Navigation (Native Stack) | 7.x |
+| **State Management** | Zustand | 5.0.9 |
+| **File System** | react-native-fs | 2.20.0 |
+| **File Viewer** | react-native-file-viewer | 2.1.5 |
+| **Testing** | Jest + Testing Library | 29.x |
+| **Linting** | ESLint | 8.x |
+| **Formatting** | Prettier | 2.8.8 |
+
+### Why Zustand?
+Chose Zustand over Redux/Context for state management because:
+- Minimal boilerplate with excellent TypeScript support
+- No provider wrappers needed
+- Built-in support for computed/derived state
+- Simple API that's easy to test
+- Lightweight (~1KB)
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+├── components/           # Reusable UI components
+│   ├── AppBar/          # Navigation header
+│   ├── Button/          # Custom button component
+│   ├── Card/            # Card container
+│   ├── EmptyState/      # Empty list state
+│   └── ...
+├── data/                # Mock payslip data
+├── hooks/               # Custom hooks (useDebounce)
+├── navigation/          # Navigation configuration & types
+├── screens/
+│   ├── PayslipListScreen/
+│   │   ├── components/  # Screen-specific components
+│   │   ├── utils/       # Constants, types
+│   │   └── index.tsx
+│   └── PayslipDetailsScreen/
+│       ├── components/
+│       ├── utils/
+│       └── index.tsx
+├── store/               # Zustand store
+│   ├── models/          # TypeScript interfaces
+│   └── payslipStore.ts
+├── theme/               # Colors, spacing, typography
+└── utils/               # Utilities (dateUtils, fileUtils, constants)
+
+__tests__/               # Test files (mirrors src structure)
+├── components/
+├── screens/
+├── state/
+└── utils/
+
+android/app/src/main/assets/   # Bundled PDF for Android
+ios/PayrollApp/                # Bundled PDF for iOS
 ```
 
-## Step 2: Build and run your app
+---
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## 🚀 Getting Started
 
-### Android
+### Prerequisites
 
-```sh
-# Using npm
-npm run android
+- **Node.js** >= 20 (check with `node -v`)
+- **npm** or **yarn**
+- **Xcode** 15+ (for iOS, macOS only)
+- **Android Studio** with SDK 34+ (for Android)
+- **CocoaPods** (for iOS dependencies)
+- **Watchman** (recommended for macOS)
 
-# OR using Yarn
-yarn android
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd PayrollApp
+
+# 2. Install JavaScript dependencies
+npm install
+
+# 3. Install iOS dependencies (macOS only)
+cd ios && pod install && cd ..
 ```
 
-### iOS
+### Running the App
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+#### iOS (macOS only)
+```bash
+# Run on default simulator
 npm run ios
 
-# OR using Yarn
-yarn ios
+# Run on specific simulator
+npx react-native run-ios --simulator="iPhone 16 Pro"
+
+# Run on physical device (requires signing)
+npx react-native run-ios --device
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+#### Android
+```bash
+# Start Android emulator first, or connect a device
+npm run android
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+# Or explicitly
+npx react-native run-android
+```
 
-## Step 3: Modify your app
+#### Metro Bundler
+```bash
+# Start Metro (auto-starts with run commands)
+npm start
 
-Now that you have successfully run the app, let's make changes!
+# Clear cache if needed
+npm start -- --reset-cache
+```
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+---
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## 🧪 Testing
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+```bash
+# Run all tests
+npm test
 
-## Congratulations! :tada:
+# Run with coverage report
+npm test -- --coverage
 
-You've successfully run and modified your React Native App. :partying_face:
+# Run specific test file
+npm test -- dateUtils.test.ts
 
-### Now what?
+# Watch mode (re-runs on file changes)
+npm test -- --watch
+```
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+### Test Coverage
 
-# Troubleshooting
+| Test Suite | Tests | Description |
+|------------|-------|-------------|
+| `dateUtils.test.ts` | 12 | Date formatting, year extraction, range formatting |
+| `payslipStore.test.ts` | 18 | Zustand store actions, filtering, sorting |
+| `PayslipListScreen.test.tsx` | 7 | Screen rendering, search, empty states |
+| `PayslipListItem.test.tsx` | 5 | Component rendering, tap handling |
+| `App.test.tsx` | 1 | App renders without crashing |
+| **Total** | **42** | |
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+---
 
-# Learn More
+## 🔍 Linting & Type Checking
 
-To learn more about React Native, take a look at the following resources:
+```bash
+# Run ESLint
+npm run lint
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+# Run TypeScript compiler (type check only)
+npx tsc --noEmit
+```
+
+---
+
+## 🏗 Architecture Decisions
+
+### State Management (Zustand)
+- Single store with payslips, filters, and sort order
+- Derived `filteredPayslips` computed on state changes
+- Actions: `setSortOrder`, `setFilters`
+- No provider needed - components subscribe directly
+
+### File Handling Strategy
+- **Android**: Uses `RNFS.copyFileAssets()` to copy from bundled assets to Downloads
+- **iOS**: Uses `RNFS.copyFile()` from MainBundle to Documents
+- Permissions requested at runtime for Android < 13
+- `RNFS.scanFile()` triggers media scanner so files appear in Android Files app
+
+### Component Architecture
+- **Screen components**: Handle navigation, state subscription, layout
+- **Feature components**: Screen-specific (PayslipListItem, PayslipDetailCard)
+- **Common components**: Reusable UI primitives (Button, Card, AppBar, EmptyState)
+
+### Navigation
+- Native Stack Navigator for performant screen transitions
+- Typed route parameters with `RootStackParamList`
+- Centralized route constants
+
+---
+
+## ⚠️ Known Limitations
+
+1. **Mock Data Only**: No backend integration; uses hardcoded payslip data
+2. **Single PDF Asset**: Same `mock_payslip.pdf` reused across all payslips for demo purposes
+3. **No Image Payslip Asset**: Image file type defined but PNG not bundled (PDF works)
+4. **No Offline Caching**: Downloaded files are saved, but metadata isn't cached
+5. **No Authentication**: No user login or authorization
+6. **Basic Error Handling**: Errors shown via alerts; no retry mechanisms
+7. **No Localization**: English only; dates formatted for US locale
+
+---
+
+## 🔮 Future Improvements
+
+Given more time, I would implement:
+
+### High Priority
+- **Bundle image assets**: Add PNG payslip examples for image file type
+- **Enhanced error handling**: Retry mechanisms, better error messages
+- **Offline support**: Cache payslip metadata with AsyncStorage/MMKV
+
+### Medium Priority
+- **E2E tests**: Add Detox tests for critical user flows
+- **Accessibility audit**: Full VoiceOver/TalkBack testing
+- **Performance optimization**: FlatList `getItemLayout`, memo optimization
+- **Share functionality**: Share downloaded files via native share sheet
+
+### Nice to Have
+- **Multiple selection**: Bulk download payslips
+- **Push notifications**: Alert when new payslips available
+- **Biometric auth**: Secure access with Face ID / fingerprint
+- **Dark mode toggle**: In-app theme switching
+- **CI/CD**: GitHub Actions for automated testing and builds
+
+---
+
+## 📝 API Reference
+
+### Payslip Model
+```typescript
+interface Payslip {
+  id: string;              // Unique identifier (e.g., "PS-2024-001")
+  fromDate: string;        // ISO date string ("2024-01-01")
+  toDate: string;          // ISO date string ("2024-01-31")
+  file: {
+    name: string;          // Display name
+    type: FileType;        // 'pdf' | 'image'
+    uri: string;           // Asset filename
+  };
+}
+
+enum FileType {
+  PDF = 'pdf',
+  IMAGE = 'image',
+}
+
+enum SortOrder {
+  NEWEST = 'newest',
+  OLDEST = 'oldest',
+}
+```
+
+### Zustand Store
+```typescript
+interface PayslipState {
+  // State
+  payslips: Payslip[];
+  sortOrder: SortOrder;
+  filters: { year?: number; searchQuery?: string };
+  
+  // Derived
+  filteredPayslips: Payslip[];
+  availableYears: number[];
+  
+  // Actions
+  setSortOrder: (order: SortOrder) => void;
+  setFilters: (filters: Partial<PayslipFilters>) => void;
+}
+```
+
+---
+
+## 📄 License
+
+This project is for assessment purposes only.
