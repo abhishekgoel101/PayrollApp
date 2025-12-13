@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Required for react-native-fs to read/write files -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
       android:name=".MainApplication"
@@ -24,4 +27,10 @@
         </intent-filter>
       </activity>
     </application>
+    <queries> 
+      <intent> 
+        <action android:name="android.intent.action.VIEW" /> 
+        <data android:mimeType="*/*" /> 
+      </intent> 
+    </queries>
 </manifest>
