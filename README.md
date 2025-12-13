@@ -21,9 +21,7 @@ A React Native application (TypeScript) for managing and viewing payslips with n
 - Saves files to platform-appropriate directories:
   - **Android**: Public Downloads directory
   - **iOS**: App Documents directory
-- Android runtime permissions handling (for API < 33)
 - Native file viewer integration via `react-native-file-viewer`
-- Media scanner trigger on Android so files appear in Files app
 
 ---
 
@@ -41,14 +39,6 @@ A React Native application (TypeScript) for managing and viewing payslips with n
 | **Testing** | Jest + Testing Library | 29.x |
 | **Linting** | ESLint | 8.x |
 | **Formatting** | Prettier | 2.8.8 |
-
-### Why Zustand?
-Chose Zustand over Redux/Context for state management because:
-- Minimal boilerplate with excellent TypeScript support
-- No provider wrappers needed
-- Built-in support for computed/derived state
-- Simple API that's easy to test
-- Lightweight (~1KB)
 
 ---
 
@@ -167,17 +157,6 @@ npm test -- dateUtils.test.ts
 npm test -- --watch
 ```
 
-### Test Coverage
-
-| Test Suite | Tests | Description |
-|------------|-------|-------------|
-| `dateUtils.test.ts` | 12 | Date formatting, year extraction, range formatting |
-| `payslipStore.test.ts` | 18 | Zustand store actions, filtering, sorting |
-| `PayslipListScreen.test.tsx` | 7 | Screen rendering, search, empty states |
-| `PayslipListItem.test.tsx` | 5 | Component rendering, tap handling |
-| `App.test.tsx` | 1 | App renders without crashing |
-| **Total** | **42** | |
-
 ---
 
 ## 🔍 Linting & Type Checking
@@ -204,7 +183,7 @@ npx tsc --noEmit
 - **Android**: Uses `RNFS.copyFileAssets()` to copy from bundled assets to Downloads
 - **iOS**: Uses `RNFS.copyFile()` from MainBundle to Documents
 - Permissions requested at runtime for Android < 13
-- `RNFS.scanFile()` triggers media scanner so files appear in Android Files app
+
 
 ### Component Architecture
 - **Screen components**: Handle navigation, state subscription, layout
@@ -223,34 +202,18 @@ npx tsc --noEmit
 1. **Mock Data Only**: No backend integration; uses hardcoded payslip data
 2. **Single PDF Asset**: Same `mock_payslip.pdf` reused across all payslips for demo purposes
 3. **No Image Payslip Asset**: Image file type defined but PNG not bundled (PDF works)
-4. **No Offline Caching**: Downloaded files are saved, but metadata isn't cached
-5. **No Authentication**: No user login or authorization
-6. **Basic Error Handling**: Errors shown via alerts; no retry mechanisms
-7. **No Localization**: English only; dates formatted for US locale
+4. **Limited Image Format Support**: Only PNG supported for image type; no JPEG, WebP, or other formats (Android only)
+5. **Static Theme**: Theme is a constant object without ThemeProvider; no reactivity or dark mode support
+6. **No Icon Library**: Uses plain text characters and emojis instead of proper image/SVG icons (no react-native-vector-icons or similar)
+7. **No Pagination**: List loads all data at once; no infinite scroll or pagination support for large datasets from backend
+8. **Basic Error Handling**: Errors shown via alerts; no retry mechanisms
+9. **No Localization**: English only; dates formatted for US locale
 
----
-
-## 🔮 Future Improvements
-
-Given more time, I would implement:
-
-### High Priority
-- **Bundle image assets**: Add PNG payslip examples for image file type
-- **Enhanced error handling**: Retry mechanisms, better error messages
-- **Offline support**: Cache payslip metadata with AsyncStorage/MMKV
-
-### Medium Priority
-- **E2E tests**: Add Detox tests for critical user flows
-- **Accessibility audit**: Full VoiceOver/TalkBack testing
-- **Performance optimization**: FlatList `getItemLayout`, memo optimization
-- **Share functionality**: Share downloaded files via native share sheet
 
 ### Nice to Have
 - **Multiple selection**: Bulk download payslips
-- **Push notifications**: Alert when new payslips available
-- **Biometric auth**: Secure access with Face ID / fingerprint
+- **Share functionality**: Share downloaded files via native share sheet
 - **Dark mode toggle**: In-app theme switching
-- **CI/CD**: GitHub Actions for automated testing and builds
 
 ---
 
