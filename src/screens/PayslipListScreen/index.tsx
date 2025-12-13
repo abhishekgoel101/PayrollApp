@@ -112,8 +112,8 @@ export function PayslipListScreen(props: PayslipListScreenProps) {
         />
       </View>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
-      filters.searchQuery,
       filters.year,
       sortOrder,
       availableYears,
