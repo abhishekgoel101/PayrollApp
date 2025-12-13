@@ -20,9 +20,9 @@ export const mockPayslips: Payslip[] = [
     fromDate: '2024-02-01',
     toDate: '2024-02-29',
     file: {
-      name: 'payslip_february_2024.png',
-      type: FileType.IMAGE,
-      uri: 'mock_payslip_image.png',
+      name: 'payslip_february_2024.pdf',
+      type: FileType.PDF,
+      uri: 'mock_payslip.pdf',
     },
   },
   {
@@ -60,9 +60,9 @@ export const mockPayslips: Payslip[] = [
     fromDate: '2024-06-01',
     toDate: '2024-06-30',
     file: {
-      name: 'payslip_june_2024.png',
-      type: FileType.IMAGE,
-      uri: 'mock_payslip_image.png',
+      name: 'payslip_june_2024.pdf',
+      type: FileType.PDF,
+      uri: 'mock_payslip.pdf',
     },
   },
   {
